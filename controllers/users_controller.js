@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 //render the profile page
 module.exports.profile = function(req, res){
-    res.render("usersProfile",{
+    res.render("user_profile",{
         title: "Users Profile"
     });
 }
@@ -16,14 +16,20 @@ module.exports.posts = function(req, res){
 
 //render the sign up page
 module.exports.signUp = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     res.render('users_sign_up',{
         title: 'Sign Up for Codeial'
     });
 }
 
 //render the sign in page
-module.exports.logIn = function(req, res){
-    res.render('users_log_in',{
+module.exports.signIn = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
+    res.render('users_sign_in',{
         title:'Log In to Codeial'
     });
 }
@@ -39,8 +45,8 @@ module.exports.create = async function(req, res){
         const user = await User.findOne({email: req.body.email});
 
         if(!user){
-            User.create(req.body);
-            return res.redirect('/users/log-in');
+            const user = await User.create(req.body);
+            return res.redirect('/users/sign-in');
         }else{
             res.redirect('back');
         }
@@ -53,5 +59,17 @@ module.exports.create = async function(req, res){
 
 //log in and create the session for the user
 module.exports.createSession = function(req, res){
-    //TODO LATER
+    return res.redirect('/');
+}
+
+module.exports.destroySession = function(req, res){
+    //logout function is given from passport to req
+    req.logout(function(err){
+        if(err){
+            console.log('Error in Sign Out');
+        }
+        else{
+            return res.redirect('/');
+        }
+    });
 }

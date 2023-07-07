@@ -1,29 +1,25 @@
-#logIn-page{
-    border:1px solid grey;
-    padding:2%;
-    width:380px;
-    height:65vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin:5vh auto;
+#logIn-page {
+  border: 1px solid grey;
+  padding: 2%;
+  width: 380px;
+  height: 65vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5vh auto; }
 
-}
+#logIn-page input {
+  margin: 4%;
+  line-height: 1.3rem;
+  width: 250px;
+  border-radius: 5px; }
 
-#logIn-page input{
-    margin:4%;
-    line-height: 1.3rem;
-    width:250px;
-    border-radius: 5px;
-}
-
-#logIn-page button{
-    margin:5%;
-    padding: 0.5rem;
-    font-size:1.1rem;
-    border-radius:15px;
-    background-color: blue;
-    color: aliceblue;
-    width:5rem;
-    border:none;
-}
+#logIn-page button {
+  margin: 5%;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  border-radius: 15px;
+  background-color: blue;
+  color: aliceblue;
+  width: 5rem;
+  border: none; }
