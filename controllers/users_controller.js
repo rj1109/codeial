@@ -7,13 +7,6 @@ module.exports.profile = function(req, res){
     });
 }
 
-//render the posts page
-module.exports.posts = function(req, res){
-    res.render("usersPosts",{
-        title: "Your Posts"
-    });
-}
-
 //render the sign up page
 module.exports.signUp = function(req, res){
     if(req.isAuthenticated()){

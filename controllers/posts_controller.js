@@ -9,6 +9,6 @@ module.exports.create =async function(req, res){
 
         return res.redirect('back');
     }catch(err){
-        console.log("Error in pushing post data to database");
+        console.log("Error in pushing post data to database",err);
     }
 }
