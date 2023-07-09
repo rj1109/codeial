@@ -1,6 +1,6 @@
 const Post = require('../models/post');
 
-module.exports.home =async function(req, res){
+module.exports.home = async function(req, res){
     // console.log(req.cookies);
     // res.cookie('user_id',25);
 
@@ -16,18 +16,23 @@ module.exports.home =async function(req, res){
     // }
 
     //populate the user of each post
-    try{
-        const posts =await Post.find({}).populate('user');
-
-        return res.render("home",{
-            title:"Home",
-            posts: posts
-        });
-
-    }catch(err){
-        console.log('Error while fetching profile information of the post', err);
-    }
+    try {
+        const posts = await Post.find({})
+          .populate('user')
+          .populate({
+            path: 'comments',
+            populate: {
+              path: 'user',
+            }
+          })
+          .exec();
     
+        return res.render('home', {
+          title: 'Codeial | Home',
+          posts: posts,
+        });
+      } catch (err) {
+        console.log('Error while fetching posts and comments from the database', err);
+      }
 }
-
 //module.exports.actionName = function(req, res){};
