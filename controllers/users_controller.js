@@ -1,10 +1,21 @@
 const User = require('../models/user');
 
 //render the profile page
-module.exports.profile = function(req, res){
+module.exports.profile =async function(req, res){
+    const user = await User.findById(req.params.id);
     res.render("user_profile",{
-        title: "Users Profile"
+        title: "Users Profile",
+        profile_user:user
     });
+}
+
+module.exports.update =async function(req, res){
+    if(req.user.id == req.params.id){
+        const user = await User.findByIdAndUpdate(req.params.id, req.body);
+        return res.redirect('back');
+    }else{
+        return res.status(401).send('Unauthorized');
+    }
 }
 
 //render the sign up page
