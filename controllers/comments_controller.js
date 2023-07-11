@@ -3,54 +3,52 @@ const Post = require('../models/post');
 
 module.exports.create = async function(req, res) {
   try {
-    const post = await Post.findById(req.body.post);
+    let post = await Post.findById(req.body.post);
 
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
+    if(post){
+      let comment = await Comment.create({
+        content: req.body.content,
+        post: req.body.post,
+        user: req.user._id
+      });
+  
+      post.comments.push(comment);
+      await post.save();
+      
+      req.flash('success', 'Comment Sent!');
+      return res.redirect('/');
     }
-
-    const comment = await Comment.create({
-      content: req.body.content,
-      post: req.body.post,
-      user: req.user._id
-    });
-
-    post.comments.push(comment);
-    await post.save();
-
-    res.redirect('/');
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    req.flash('error', err);
+    return res.redirect('/');
   }
 };
 
 module.exports.destroy = async function(req, res) {
   try {
-    const comment = await Comment.findById(req.params.id);
-
-    if (!comment) {
-      return res.status(404).json({ error: 'Comment not found' });
-    }
+    let comment = await Comment.findById(req.params.id);
 
     let postId = comment.post;
 
     const post = await Post.findById(postId);
 
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
-
-    if (comment.user.toString() === req.user._id.toString() || post.user.toString() === req.user._id.toString()) {
+    if (comment.user == req.user.id || post.user == req.user.id) {
       // User is the creator of the comment or the post
       await Comment.findByIdAndDelete(req.params.id);
+
       post.comments.pull(req.params.id);
+
       await post.save();
+
+      req.flash('success', 'Comment deleted!');
+      
       return res.redirect('back');
     } else {
+      req.flash('error', err);
       return res.status(401).json({ error: 'Unauthorized' });
     }
   } catch (err) {
+    req.flash('error', err);
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
   }

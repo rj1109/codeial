@@ -18,7 +18,7 @@ module.exports.home = async function(req, res){
 
     //populate the user of each post
     try {
-        const posts = await Post.find({})
+        let posts = await Post.find({})
           .populate('user')
           .populate({
             path: 'comments',
@@ -28,7 +28,7 @@ module.exports.home = async function(req, res){
           })
           .exec();
         
-        const users = await User.find({});
+        let users = await User.find({});
 
         return res.render('home', {
           title: 'Codeial | Home',
@@ -37,6 +37,14 @@ module.exports.home = async function(req, res){
         });
       } catch (err) {
         console.log('Error while fetching posts and comments from the database', err);
+        return;
       }
 }
 //module.exports.actionName = function(req, res){};
+
+//using then
+//Post.find({}).populate('comments').then(function());
+
+// let posts = Post.find({}).populate('comments').exec();
+
+// posts.then();

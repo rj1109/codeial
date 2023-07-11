@@ -50,19 +50,25 @@ module.exports.create = async function(req, res){
 
         if(!user){
             const user = await User.create(req.body);
+            req.flash('success', 'User Created Successfully!')
             return res.redirect('/users/sign-in');
         }else{
+            req.flash('error', 'User already exist!');
+        
             res.redirect('back');
         }
         
     }catch(err){
+        req.flash('error', err)
         console.log("Error in finding user in sign up");
+        return res.redirect('back');
     }
     
 }
 
 //log in and create the session for the user
 module.exports.createSession = function(req, res){
+    req.flash('success', 'Logged in Successfully');
     return res.redirect('/');
 }
 
@@ -73,7 +79,11 @@ module.exports.destroySession = function(req, res){
             console.log('Error in Sign Out');
         }
         else{
+            req.flash('success', 'You have logged out!');
             return res.redirect('/');
         }
     });
+
+
+    // return res.redirect('/');
 }
