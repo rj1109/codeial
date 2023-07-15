@@ -10,7 +10,7 @@ module.exports.create =async function(req, res){
 
         if(req.xhr){
             return res.status(200).json({
-                content:{
+                data:{
                     post:post
                 },
                 message:'Post Created!'
