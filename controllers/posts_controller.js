@@ -13,11 +13,10 @@ module.exports.create =async function(req, res){
                 data:{
                     post:post
                 },
-                message:'Post Created!'
+                message:'Post Created!',
             }); 
         }
-
-        req.flash('success', 'Post publised!');
+        
         return res.redirect('back');
     }catch(err){
         req.flash('error', err);
@@ -33,6 +32,15 @@ module.exports.destroy = async function(req, res){
             await Post.deleteOne({_id: post._id});
             
             await Comment.deleteMany({post: req.params.id});
+
+            if(req.xhr){
+                return res.status(200).json({
+                    data:{
+                        post_id:req.params.id
+                    },
+                    message: "Post deleted"
+                })
+            }
 
             req.flash('success', 'Post and associated comments deleted!');
 
